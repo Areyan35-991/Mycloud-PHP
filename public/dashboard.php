@@ -50,10 +50,10 @@ unset($_SESSION['flash']);
     pointer-events: none; z-index: 0;
   }
 
-  /* ── Layout ── */
+  /* Layout*/
   .shell { position: relative; z-index: 1; display: flex; flex-direction: column; min-height: 100vh; }
 
-  /* ── Nav ── */
+  /*Nav*/
   nav {
     background: rgba(26,29,39,.85);
     backdrop-filter: blur(12px);
@@ -75,10 +75,10 @@ unset($_SESSION['flash']);
   }
   .btn-logout:hover { color: var(--danger); border-color: var(--danger); }
 
-  /* ── Main ── */
+  /* Main */
   main { flex: 1; padding: 2rem; max-width: 1100px; margin: 0 auto; width: 100%; }
 
-  /* ── Flash ── */
+  /* Flash */
   .flash {
     border-radius: 8px; padding: .75rem 1rem; font-size: .875rem; margin-bottom: 1.5rem;
     animation: rise .3s ease both;
@@ -88,7 +88,7 @@ unset($_SESSION['flash']);
 
   @keyframes rise { from { opacity:0; transform: translateY(-8px); } to { opacity:1; transform:none; } }
 
-  /* ── Upload zone ── */
+  /* Upload zone */
   .upload-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -130,7 +130,7 @@ unset($_SESSION['flash']);
   .btn-upload:hover { opacity: .85; }
   .btn-upload.visible { display: inline-block; }
 
-  /* ── File table ── */
+  /* File table */
   .files-card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -186,7 +186,7 @@ unset($_SESSION['flash']);
   .empty-state { text-align: center; padding: 4rem 1rem; color: var(--muted); }
   .empty-state-icon { font-size: 3rem; margin-bottom: 1rem; opacity: .5; }
 
-  /* ── Share modal ── */
+  /* Share modal */
   .modal-backdrop {
     display: none; position: fixed; inset: 0;
     background: rgba(0,0,0,.7); z-index: 200;
@@ -384,7 +384,7 @@ dropzone.addEventListener('drop', ev => {
   }
 });
 
-// ── XHR upload with progress ──
+// XHR upload with progress
 document.getElementById('upload-form').addEventListener('submit', function(e) {
   e.preventDefault();
   if (!fileInput.files.length) return;
@@ -427,7 +427,7 @@ function formatBytes(b) {
   return b.toFixed(1) + ' ' + units[i];
 }
 
-// ── Share modal ──
+// Share modal
 async function openShare(uuid, name) {
   document.getElementById('share-filename').textContent = name;
   document.getElementById('share-url').value = 'Generating link…';
