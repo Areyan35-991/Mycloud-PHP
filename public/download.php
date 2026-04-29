@@ -33,12 +33,12 @@ if (!file_exists($path) || !is_readable($path)) {
     abort(404, 'File missing from storage.');
 }
 
-// ── Stream the file ───────────────────────────────────────────────────────────
+// Stream the file 
 $mimeType = $file['mime_type'];
 $filename = $file['original_name'];
 $size     = filesize($path);
 
-// Decide disposition: preview in-browser vs force download
+// preview in-browser vs force download
 $previewable = in_array($mimeType, [
     'image/jpeg','image/png','image/gif','image/webp',
     'video/mp4','video/webm',
@@ -50,11 +50,11 @@ $disposition = $previewable ? 'inline' : 'attachment';
 header('Content-Type: ' . $mimeType);
 header('Content-Disposition: ' . $disposition . '; filename="' . addslashes($filename) . '"');
 header('Content-Length: ' . $size);
-header('Cache-Control: private, no-store');           // don't cache private files
+header('Cache-Control: private, no-store');           
 header('X-Content-Type-Options: nosniff');
-header('Accept-Ranges: bytes');                        // enables seek in video
+header('Accept-Ranges: bytes');                        
 
-// ── Range request support (seek in video/audio) ───────────────────────────────
+//  Range request support (seek in video/audio) 
 if (isset($_SERVER['HTTP_RANGE'])) {
     [$unit, $range] = explode('=', $_SERVER['HTTP_RANGE'], 2);
     if ($unit === 'bytes') {
