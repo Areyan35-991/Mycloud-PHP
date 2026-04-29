@@ -1,44 +1,39 @@
--- Migration 001: initial schema
--- SQLite — all timestamps stored as ISO-8601 UTC strings
 
-PRAGMA journal_mode = WAL;       -- better concurrency
-PRAGMA foreign_keys = ON;        -- enforce FK constraints
+PRAGMA journal_mode = WAL;       
+PRAGMA foreign_keys = ON;        
 
--- ─── Files ──────────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS files (
     id            INTEGER PRIMARY KEY AUTOINCREMENT,
-    uuid          TEXT    NOT NULL UNIQUE,          -- UUID v4, used in URLs & paths
-    original_name TEXT    NOT NULL,                 -- original filename from client
-    stored_name   TEXT    NOT NULL UNIQUE,          -- uuid + ext, name on disk
+    uuid          TEXT    NOT NULL UNIQUE,          
+    original_name TEXT    NOT NULL,                 
+    stored_name   TEXT    NOT NULL UNIQUE,          
     mime_type     TEXT    NOT NULL,
-    size          INTEGER NOT NULL,                 -- bytes
-    sha256        TEXT    NOT NULL,                 -- hex digest for integrity checks
+    size          INTEGER NOT NULL,                
+    sha256        TEXT    NOT NULL,                
     uploaded_at   TEXT    NOT NULL DEFAULT (datetime('now')),
-    deleted_at    TEXT    DEFAULT NULL              -- soft-delete
+    deleted_at    TEXT    DEFAULT NULL             
 );
 
 CREATE INDEX IF NOT EXISTS idx_files_uuid       ON files(uuid);
 CREATE INDEX IF NOT EXISTS idx_files_deleted_at ON files(deleted_at);
 
--- ─── Share links ─────────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS share_links (
     id            INTEGER PRIMARY KEY AUTOINCREMENT,
     file_id       INTEGER NOT NULL REFERENCES files(id) ON DELETE CASCADE,
-    token         TEXT    NOT NULL UNIQUE,           -- 32-byte random hex
-    label         TEXT    DEFAULT NULL,              -- optional human-readable label
+    token         TEXT    NOT NULL UNIQUE,           
+    label         TEXT    DEFAULT NULL,              
     download_count INTEGER NOT NULL DEFAULT 0,
     created_at    TEXT    NOT NULL DEFAULT (datetime('now')),
-    expires_at    TEXT    DEFAULT NULL               -- NULL = never expires (v1 default)
+    expires_at    TEXT    DEFAULT NULL               
 );
 
 CREATE INDEX IF NOT EXISTS idx_share_token ON share_links(token);
 
--- ─── Login audit log ─────────────────────────────────────────────────────────
 CREATE TABLE IF NOT EXISTS login_attempts (
     id          INTEGER PRIMARY KEY AUTOINCREMENT,
     ip          TEXT    NOT NULL,
     username    TEXT    NOT NULL,
-    success     INTEGER NOT NULL DEFAULT 0,          -- 0 = fail, 1 = success
+    success     INTEGER NOT NULL DEFAULT 0,         
     attempted_at TEXT   NOT NULL DEFAULT (datetime('now'))
 );
 
